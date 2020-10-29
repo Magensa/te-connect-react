@@ -1,13 +1,15 @@
 # TEConnect React Component
+[![npm version](https://img.shields.io/npm/v/@magensa/te-connect-react.svg?style=for-the-badge)](https://www.npmjs.com/package/@magensa/te-connect-react "@magensa/te-connect-react npm.js")  
+
 React component for use with Token Exchange Connect utility.
 
 # Getting Started
 ```
-npm install te-connect te-connect-react
+npm install @magensa/te-connect @magensa/te-connect-react
 ```
 or
 ```
-yarn add te-connnect te-connect-react
+yarn add @magensa/te-connnect @magensa/te-connect-react
 ```
 
 If you would prefer to let the code speak, below we have an [example implementation](#-Example-Implementation)
@@ -28,7 +30,7 @@ If you would prefer to let the code speak, below we have an [example implementat
         </TEConnect>
     );
     ```
-    - It's recommended to place this instantiation at the entrypoint of your application, to avoid multiple re-renders - or creating a new instance accidentally.  
+    - It's recommended to place this instance at the entrypoint of your application, to avoid multiple re-renders - or creating a new instance accidentally.  
     - There is an optional ```options``` object that can be passed to ```createTEConnect``` as the second parameter. At this time, the ```options``` object contains one property: ```hideZip```, which accepts a boolean.  
         - To complete a ```createPayment``` call, a ```billingZip``` must either be supplied via the input box provided - or you can hide the zip box if you choose to use your own. ```TEConnect```, by default, displays four inputs (including Zip). If you choose to hide the zip - you must supply a ```billingZip``` to the ```createPayment``` function later.
     
