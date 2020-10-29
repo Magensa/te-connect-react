@@ -18,8 +18,8 @@ If you would prefer to let the code speak, below we have an [example implementat
 
     ```javascript
     import React from 'react';
-    import { TEConnect } from 'te-connect-react';
-    import { createTEConnect } from 'te-connect';
+    import { TEConnect } from '@magensa/te-connect-react';
+    import { createTEConnect } from '@magensa/te-connect';
     import ExampleApp from './components/exampleApp';
 
     const teConnectInstance = createTEConnect("__publicKeyGoesHere__", /*{ hideZip: true }*/);
@@ -38,7 +38,7 @@ If you would prefer to let the code speak, below we have an [example implementat
 2. Next, once you have your form designed - drop the ```CardEntry``` component in the place of your choosing.
     ```javascript
     import React from 'react';
-    import { CardEntry } from 'te-connect-react';
+    import { CardEntry } from '@magensa/te-connect-react';
 
     const appStyles = {
         height: '100px'
@@ -61,7 +61,7 @@ If you would prefer to let the code speak, below we have an [example implementat
  3. Finally, to submit the inputted card values, utilize the ```createPayment``` and ```getCurrentElements``` functions and attach to your click handler.  
  ```javascript
     import React from 'react';
-    import { CardEntry, useTeConnect } from 'te-connect-react';
+    import { CardEntry, useTeConnect } from '@magensa/te-connect-react';
 
     const customStyles =  {
         base: {
@@ -216,8 +216,8 @@ Below we have the complete API with examples of default values for each.
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { TEConnect, CardEntry, useTeConnect  } from 'te-connect-react';
-import { createTEConnect } from 'te-connect';
+import { TEConnect, CardEntry, useTeConnect  } from '@magensa/te-connect-react';
+import { createTEConnect } from '@magensa/te-connect';
 
 const customStyles =  {
     base: {
