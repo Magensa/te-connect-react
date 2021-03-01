@@ -32,7 +32,7 @@ If you would prefer to let the code speak, below we have an [example implementat
     ```
     - It's recommended to place this instance at the entrypoint of your application, to avoid multiple re-renders - or creating a new instance accidentally.  
     - There is an optional ```options``` object that can be passed to ```createTEConnect``` as the second parameter. At this time, the ```options``` object contains one property: ```hideZip```, which accepts a boolean.  
-        - To complete a ```createPayment``` call, a ```billingZip``` must either be supplied via the input box provided - or you can hide the zip box if you choose to use your own. ```TEConnect```, by default, displays four inputs (including Zip). If you choose to hide the zip - you must supply a ```billingZip``` to the ```createPayment``` function later.
+        - See [Billing ZIP Options](#Options-for-billingZip) for more info.
     
 
 2. Next, once you have your form designed - drop the ```CardEntry``` component in the place of your choosing.
@@ -100,6 +100,7 @@ If you would prefer to let the code speak, below we have an [example implementat
                 console.log('[Catch]:', err);
             }
         }
+
         return (
             <>
                 <CardEntry stylesConfig={ customStyles } />
@@ -111,8 +112,69 @@ If you would prefer to let the code speak, below we have an [example implementat
  ```
 - Make sure to ```await``` this call, since it is asyncronous, and additionally be sure to wrap the call in a ```try/catch```.
     - It's important to note that while there are some cases which will throw an exception (```catch```) - there are other cases in which an object will return successfully with an error message. Make sure you check for an ```error``` property on the returned object. If it's not present - the call is succesful. For additional information, please see the possible [return objects](#-createPayment-Return-Objects)
-- Note the optional ```billingZip``` parameter. If you chose to ```hideZip``` when creating the instance - you must provide a zip code to the ```createPayment``` function. If you did not hide the Zip input - then there is no need to provide the ```billingZip``` parameter.  
+
 - Note that in this example, we chose to provide customStyles to the ```CardEntry``` component.  
+<br />
+
+## Options for ```billingZip```
+-----------------------  
+Billing Zip Code (```billingZip```) is an optional field. There are two different ways to supply the ```billingZip```, and one way to opt out.  
+### _Opt In_:
+The below instance will display the "ZIP Code" field along the other inputs. When choosing this option, the ZIP Code input box will be a required field for the customer.
+```javascript
+    const teConnectInstance = createTEConnect("__publicKeyGoesHere__");
+```  
+
+### _Supply Optional Billing Zip_:
+The below will hide the "ZIP Code" input box. Once the field is hidden - the value becomes optional. If you would still like to supply a billing zip (I.E. You have a ZIP Code input on your own form, and would like the billingZip to be included in the payment token), here is an example of how to achieve that.
+```javascript
+    //First, create the instance with the ZIP field hidden
+    const teConnectInstance = createTEConnect("__publicKeyGoesHere__", { hideZip: true });
+
+    //Then supply the value when making the call to create payment token.
+    const clickHandler = async(e) => {
+        const billingZipCode = "90018";
+        //Note that 'billingZip' is a string.
+
+        try {
+            const elements = getCurrentElements();
+            const teConnectResponse = await createPayment(elements, billingZipCode);
+            const { error } = teConnectResponse;
+
+            if (error)
+                console.log("Unsuccessful, message reads: ", error);
+            else
+                console.log('result:', teConnectResponse);
+        }
+        catch(err) {
+            console.log('[Catch]:', err);
+        }
+    }
+```  
+
+### _Opt Out_:
+The below will hide the input field, and when a value is not supplied - the payment token will be created without a billing zip code.  
+```javascript
+    //First, create the instance with the ZIP field hidden
+    const teConnectInstance = createTEConnect("__publicKeyGoesHere__", { hideZip: true });
+
+    //When the ZIP field is hidden, the billingZip parameter is optional.
+    const clickHandler = async(e) => {
+        try {
+            const elements = getCurrentElements();
+            const teConnectResponse = await createPayment(elements);
+            const { error } = teConnectResponse;
+
+            if (error)
+                console.log("Unsuccessful, message reads: ", error);
+            else
+                console.log('result:', teConnectResponse);
+        }
+        catch(err) {
+            console.log('[Catch]:', err);
+        }
+    }
+```  
 
 # createPayment Return Objects
 These are the possible objects that will be returned *successfully* from the ```createPayment``` function. Thrown errors will be thrown as any other async method.  
