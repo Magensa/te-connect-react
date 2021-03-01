@@ -12,7 +12,7 @@ or
 yarn add @magensa/te-connnect @magensa/te-connect-react
 ```
 
-If you would prefer to let the code speak, below we have an [example implementation](#-Example-Implementation)
+If you would prefer to let the code speak, below we have an [example implementation](#Example-Implementation)
 
 1. The first step is to create a TEConnect instance, and feed that instance to the wrapper around your application.   
 
@@ -55,7 +55,7 @@ If you would prefer to let the code speak, below we have an [example implementat
 
     ```
 
-    - It's recommended to wrap the ```CardEntry``` with a ```<div>``` of your choosing - so you may apply wrapper styles directly to your own div for juxtaposition. It's important to note that the ```height``` of this component is set to ```100%``` so that it may respond to your application's wrapper styles. As for styles applied to the component itself - we have a [styles object](#-Styles-API) that you may use to inject your own custom styles.  
+    - It's recommended to wrap the ```CardEntry``` with a ```<div>``` of your choosing - so you may apply wrapper styles directly to your own div for juxtaposition. It's important to note that the ```height``` of this component is set to ```100%``` so that it may respond to your application's wrapper styles. As for styles applied to the component itself - we have a [styles object](#Styles-API) that you may use to inject your own custom styles.  
     - ```stylesConfig``` prop is optional. If provided, it will override the defaults.
 
  3. Finally, to submit the inputted card values, utilize the ```createPayment``` and ```getCurrentElements``` functions and attach to your click handler.  
@@ -111,7 +111,7 @@ If you would prefer to let the code speak, below we have an [example implementat
     }
  ```
 - Make sure to ```await``` this call, since it is asyncronous, and additionally be sure to wrap the call in a ```try/catch```.
-    - It's important to note that while there are some cases which will throw an exception (```catch```) - there are other cases in which an object will return successfully with an error message. Make sure you check for an ```error``` property on the returned object. If it's not present - the call is succesful. For additional information, please see the possible [return objects](#-createPayment-Return-Objects)
+    - It's important to note that while there are some cases which will throw an exception (```catch```) - there are other cases in which an object will return successfully with an error message. Make sure you check for an ```error``` property on the returned object. If it's not present - the call is succesful. For additional information, please see the possible [return objects](#createPayment-Return-Objects)
 
 - Note that in this example, we chose to provide customStyles to the ```CardEntry``` component.  
 <br />
