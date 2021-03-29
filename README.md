@@ -188,7 +188,12 @@ These are the possible objects that will be returned *successfully* from the ```
     token: String,
     code: String,
     message: String
-    status: Number
+    status: Number,
+    cardMetaData: null | {
+        maskedPAN: String,
+        expirationDate: String,
+        billingZip: null | String
+    }
 }
 ```  
   
@@ -201,7 +206,8 @@ These are the possible objects that will be returned *successfully* from the ```
     token: null,
     code: String,
     message: String,
-    error: String
+    error: String,
+    cardMetaData: null
 }
 ```
 
