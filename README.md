@@ -187,7 +187,7 @@ These are the possible objects that will be returned *successfully* from the ```
     customerTranRef: String,
     token: String,
     code: String,
-    message: String
+    message: String,
     status: Number,
     cardMetaData: null | {
         maskedPAN: String,
@@ -233,6 +233,7 @@ Below we have the complete API with examples of default values for each.
 | padding | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
 | inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
 | inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
+| autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
   
 <br />
 
@@ -246,7 +247,8 @@ Below we have the complete API with examples of default values for each.
         },
         variants: {
             inputType: 'outlined',
-            inputMargin: 'normal'
+            inputMargin: 'normal',
+            autoMinHeight: false
         },
         backgroundColor: '#fff'
     }
@@ -349,7 +351,7 @@ ReactDOM.render(
 
 
 ## Minimum Requirements
-There are three dependencies to use this product. If you built your project using [create-react-app](https://github.com/facebook/create-react-app), then you have already met the requirements. If you are building your own React app, then please make sure to include the following in your project:  
+There are three dependencies to use this product. If you built your project using [create-react-app](https://github.com/facebook/create-react-app), then you have already met the requirements (may require a 'uuid' upgrade). If you are building your own React app, then please make sure to include the following in your project:  
 
 - [React](https://github.com/facebook/react) ^16.8
 - [react-dom](https://github.com/facebook/react/tree/master/packages/react-dom) ^16.8
