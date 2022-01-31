@@ -31,10 +31,9 @@ If you would prefer to let the code speak, below we have an [example implementat
     );
     ```
     - It's recommended to place this instance at the entrypoint of your application, to avoid multiple re-renders - or creating a new instance accidentally.  
-    - There is an optional ```options``` object that can be passed to ```createTEConnect``` as the second parameter. At this time, the ```options``` object contains one property: ```hideZip```, which accepts a boolean.  
-        - See [Billing ZIP Options](#Options-for-billingZip) for more info.
-    
-
+    - There is an [optional ```options``` object](#TEConnect-Options) that can be passed to ```createTEConnect``` as the second parameter. 
+        - See [Billing ZIP Options](#Options-for-billingZip) for more info.  
+  
 2. Next, once you have your form designed - drop the ```CardEntry``` component in the place of your choosing.
     ```javascript
     import React from 'react';
@@ -116,6 +115,25 @@ If you would prefer to let the code speak, below we have an [example implementat
 - Note that in this example, we chose to provide customStyles to the ```CardEntry``` component.  
 <br />
 
+# TEConnect Options
+The second parameter of the ```createTEConnect``` method is an options object. This object is optional.
+| Property Name  | Input Type | Notes |
+|:--:|:--:|:--:|
+| billingZip | ```boolean``` | See [billingZip options below](#Options-for-billingZip) |
+| tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](TecPaymentRequestREADME.md) |
+| appleMerchantId | string | This property is part of a child object supplied to ```tecPaymentRequest```. Provide a valid ```appleMerchantId``` to [opt in for Apple Pay](TecPaymentRequestREADME.md) |
+
+```typescript
+type TecPaymentRequestOptions = {
+    appleMerchantId?: string
+}
+
+type CreateTEConnectOptions = {
+    hideZip?: boolean,
+    tecPaymentRequest?: TecPaymentRequestOptions
+}
+```
+
 ## Options for ```billingZip```
 -----------------------  
 Billing Zip Code (```billingZip```) is an optional field. There are two different ways to supply the ```billingZip```, and one way to opt out.  
@@ -182,12 +200,12 @@ These are the possible objects that will be returned *successfully* from the ```
   1. ### Success:
 ```typescript
 {
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
-    token: String,
-    code: String,
-    message: String,
+    magTranID: String,
+    timestamp: String,
+    customerTranRef: String,
+    token: String,
+    code: String,
+    message: String,
     status: Number,
     cardMetaData: null | {
         maskedPAN: String,
@@ -200,12 +218,12 @@ These are the possible objects that will be returned *successfully* from the ```
   2. ### Bad Request
 ```typescript
 {
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
-    token: null,
-    code: String,
-    message: String,
+    magTranID: String,
+    timestamp: String,
+    customerTranRef: String,
+    token: null,
+    code: String,
+    message: String,
     error: String,
     cardMetaData: null
 }
