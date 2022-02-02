@@ -434,6 +434,7 @@ const ExampleApp = () => {
                     tokenResp.completePayment('success');
                 }
             });
+        }
     }, [createTecPrInterfaceMethod, setPrInterface]);
     
     return (
@@ -614,8 +615,9 @@ const ExampleApp = () => {
                     completeShippingMethodSelection(outOfCountryShipping);
                 else
                     completeShippingMethodSelection(freeShipping);
-
-            }, [createTecPrInterfaceMethod, setPrInterface]);
+            });
+        }
+    }, [createTecPrInterfaceMethod, setPrInterface]);
     
     return (
         <div style={{ height: '100%' }}>
