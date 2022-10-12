@@ -1,11 +1,15 @@
+# Google Pay Payment Request Object
+This section lists all available properties that are available for use with TEConnect.
+Many of the properties correspond directly to Google's documentation on the payment request object ([found here](https://developers.google.com/pay/api/web/reference/request-objects#PaymentDataRequest)).  Some of the properties (such as ```tokenizationSpecification```) is built by TEConnect, and as such is not read as an input.
 
-| Property Name | Parent Property | Input Type | Acceptable Values | Default Value | Notes |
-|:--:|:--:|:--:|:--:|:--:|:---:|
-| backgroundColor | base | ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
-| margin | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
-| padding | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
-| direction | wrapper | ```string``` | ```'row', 'row-reverse', 'column', 'column-reverse'``` | ```'row'``` | ```'flex-direction'``` style property |
-| flexWrap | wrapper | ```string``` | ```'wrap', 'wrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
-| inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
-| inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
-| autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
+Examples for simple implementations can be found here //TODO: link to TecPaymentRequestREADME.
+An example for the most complex object allowed can be found below.
+
+For more information on each property - please see [Google's Documentation](https://developers.google.com/pay/api/web/reference/request-objects#PaymentDataRequest).
+
+
+| Property Name | Input Type | Required | Default Value | Notes |
+|:--:|:--:|:--:|:--:|:--:|
+| apiVersion | ```number``` | :x: | 2 | |
+| apiVersionMinor | ```number``` | :x: | 0 | |
+| allowedCardNetworks | ```Array``` of ```string``` | :heavy_check_mark: |  | |
