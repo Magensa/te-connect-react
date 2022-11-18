@@ -157,8 +157,8 @@ export const ExampleApp = () => {
     );
 }
 ```
-//TODO:
-The above is a minimally viable solution to get you started. There are [two more code examples](#example-implementation) - a minimally viable example, as well as a more complex example to leverage more of the features available. Read on for further features and details availble to the Payment Request Utility.  
+
+The above is a minimally viable solution to get you started. There are three more code examples - a [minimally viable example](#example-implementation) using both Apple Pay and Google Pay, as well as two more complex examples to leverage more of the features available, for each respective platform ([Apple Pay Complex Example here](https://github.com/Magensa/te-connect-react/blob/master/TecApplePayREADME.md#Apple-Pay-Example-Implementation), [Google Pay Complex Example here](https://github.com/Magensa/te-connect-react/blob/master/TecGooglePayREADME.md#Google-Pay-Example-Implementation)). Read on for further features and details availble to the Payment Request Utility.  
 <br />
 
 # Payment Request Object
@@ -346,7 +346,7 @@ const defaultButtonOptions = {
     },
     googlePayOptions: {
         preClick: undefined, //Only calls if is of type 'function'
-        buttonColor: undefined, //Currently defaults to 'black' but default is not static
+        buttonColor: undefined, //Currently defaults to 'black' but default is not static, and is determined by Google
         buttonType: undefined, 
         buttonLocale: undefined, //If not supplied - defaults to browser or OS language settings
         buttonSizeMode: 'static'
