@@ -12,7 +12,15 @@ or
 yarn add @magensa/te-connnect @magensa/te-connect-react
 ```
 
-If you would prefer to let the code speak, below we have an [example implementation](#Example-Implementation)
+# Manual Card Entry
+This document will cover the card manual entry component that TEConnect offers.  
+TEConnect also offers a [Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) component as well, with both Apple Pay and Google Pay supported. [Payment Request Documentation can be found here](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md)  
+Below we will begin with a step-by-step integration of the card manual entry component. If you would prefer to let the code speak, there is an [example implementation](#Example-Implementation).
+
+## Magensa™
+TEConnect Manual Entry, and [TEConnect Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) components both require a valid [Magensa™](https://magensa.net/) account. If you need assistance creating or configuring an account, please reach out to the [Magensa Support Team](https://magensa.net/support.html).
+
+# Step-By-Step
 
 1. The first step is to create a TEConnect instance, and feed that instance to the wrapper around your application.   
 
@@ -22,7 +30,7 @@ If you would prefer to let the code speak, below we have an [example implementat
     import { createTEConnect } from '@magensa/te-connect';
     import ExampleApp from './components/exampleApp';
 
-    const teConnectInstance = createTEConnect("__publicKeyGoesHere__", /*{ hideZip: true }*/);
+    const teConnectInstance = createTEConnect("__publicKeyGoesHere__", /* { hideZip: true } */);
 
     const App = () => (
         <TEConnect teConnect={ teConnectInstance }>
@@ -120,12 +128,13 @@ The second parameter of the ```createTEConnect``` method is an options object. T
 | Property Name  | Input Type | Notes |
 |:--:|:--:|:--:|
 | billingZip | ```boolean``` | See [billingZip options below](#Options-for-billingZip) |
-| tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](TecPaymentRequestREADME.md) |
-| appleMerchantId | string | This property is part of a child object supplied to ```tecPaymentRequest```. Provide a valid ```appleMerchantId``` to [opt in for Apple Pay](TecPaymentRequestREADME.md) |
+| tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) |
+
 
 ```typescript
 type TecPaymentRequestOptions = {
-    appleMerchantId?: string
+    appleMerchantId?: string,
+    googleMerchantId?: string
 }
 
 type CreateTEConnectOptions = {
