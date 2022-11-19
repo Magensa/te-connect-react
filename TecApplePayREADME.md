@@ -223,7 +223,7 @@ There are many options and styles available to assist with tailoring the Apple P
 
 ## CSS Considerations
 When the ```TecPaymentRequestButtons``` component mounts an Apple Pay button - it is wrapped in a ```<div>``` with the id of ```"te-connect-apple-pay-wrapper"```.
-You can use this target to style the wrapper around the Google Pay button, if needed.
+You can use this target to style the wrapper around the Apple Pay button, if needed.
 
 <br />
 
