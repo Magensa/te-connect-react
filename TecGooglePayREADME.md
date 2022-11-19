@@ -1,5 +1,32 @@
 # TEConnect Google Pay
-This document will cover Google Pay specific features - available for use via TEConnect.
+This document demonstrates the available options, using Google Pay via TEConnect.  TEConnect currently offers a Manual Entry form, Apple Pay and Google Pay.  Your app may use one - or all of these platforms to collect a payment token.  The section below explains how opt-in works with TEConnect, for each available platform. The remainder of the document focuses on Google Pay with TEConnect.
+
+# Payment Request Opt-In
+```createTEConnect``` accepts a public key as the first argument. This public key is for [TEConnect Manual Entry](README.md#Getting-Started).
+The second argument is the [TEConnect options](README.md#TEConnect-Options) object.  
+Providing an ```appleMerchantId``` or a ```googleMerchantId``` to the ```tecPaymentRequest``` object is how to opt-in for each Payment Request Platform.  So providing an ```appleMerchantId``` is an opt-in for Apple Pay - and a ```googleMerchantId``` for Google Pay.  Example below.
+
+```javascript
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
+    tecPaymentRequest: {
+        appleMerchantId: "__tecAppleMerchantId__"
+        googleMerchantId: "__googleMerchantId__",
+    }
+});
+```
+
+Opting in to one or more platform affects the way the Payment Request Object should be supplied to TEConnect - as well as the  [```CanMakePaymentsResult```](TecPaymentRequestREADME.md#CanMakePaymentsResult).
+
+Be aware that if you only opt-in for one platform (i.e. only an ```googleMerchantId``` is provided to ```createTEConnect```) - you may provide the payment request object for that specific platform.  In this case - the [Google Pay](#Google-Pay-Payment-Request-Object) can be provided as-is.  
+
+In the case of multiple payment request platforms (i.e. both an ```appleMerchantId``` and ```googleMerchantId``` are provided) - the payment request object must be structured to reflect each platform.  Example below.
+
+```javascript
+const paymentRequestObject = {
+    applePay: applePayRequestObject,
+    googlePay: googlePayRequestObject
+}
+```
 
 ## Important Google Pay Notes
 The Google Pay workflow differs from Apple Pay in a few ways.  

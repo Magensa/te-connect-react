@@ -14,7 +14,7 @@ or
 yarn add @magensa/te-connnect @magensa/te-connect-react
 ```
 
-If you would prefer to let the code speak, below we have two [example implementations](#Example-Implementation)
+If you would prefer to let the code speak, below we have an [example implementation](#Example-Implementation) for both platforms - along with a [Google Pay complex example](https://github.com/Magensa/te-connect-react/blob/master/TecGooglePayREADME.md#Google-Pay-Example-Implementation) and an [Apple Pay complex example](https://github.com/Magensa/te-connect-react/blob/master/TecApplePayREADME.md#Apple-Pay-Example-Implementation)
 
 # Step-by-step
 1. The first step is to create a TEConnect instance, and feed that instance to the wrapper around your application.
@@ -257,7 +257,7 @@ Apple Pay uses an event handler driven workflow. When users interact with the pa
 [More details about Apple Pay listeners here](https://github.com/Magensa/te-connect-react/blob/master/TecApplePayREADME.md#Apple-Pay-Listeners)
 
 ### ```confirm-token``` Event
-This is the only event listener that is required to complete the both workflows. This is the only event that can optionally contain an ```error``` property (in the case the payment was submitted, but was unsuccessful). Be sure to check for that property first, if it exists.  
+This is the only event listener that is required to complete both workflows. This is the only event that can optionally contain an ```error``` property (in the case the payment was submitted, but was unsuccessful). Be sure to check for that property first, if it exists.  
 When listening to the ```confirm-token``` event - there will be up to two special properties to the event:
 - ```tokenDetails```
     - ```type``` specifies the payment request platform in which the token was created.
@@ -327,7 +327,7 @@ const ExampleApp = () => {
 ```
 
 # Payment Request Button Options
-The ```TecPaymentRequestButtons``` component accepts an optional prop named ```tecPrOptions```.  Here you can define your custom options for the payment request buttons. You may define custom values for the Apple Pay Button, using the property ```applePayOptions```, and Google Pay Button with ```googlePayOptions``` (You can see the [default values](#Default-Payment-Request-Button-Options-Values), for an example on how to structure the object, [below]).
+The ```TecPaymentRequestButtons``` component accepts an optional prop named ```tecPrOptions```.  Here you can define your custom options for the payment request buttons. You may define custom values for the Apple Pay Button, using the property ```applePayOptions```, and Google Pay Button with ```googlePayOptions``` (You can see the [default values](#Default-Payment-Request-Button-Options-Values), for an example on how to structure the object, below).
 
 ## Apple Pay Button Options
 [More details about Apple Pay Button Options can be found here](https://github.com/Magensa/te-connect-react/blob/master/TecApplePayREADME.md#Apple-Pay-Button-Options)
@@ -396,7 +396,8 @@ const ExampleApp = () => {
 
                 if (error) {
                     //Unsuccessful - check message.
-                    tokenResp.completePayment('failure');
+                    if (typeof(completePayment) === 'function')
+                        tokenResp.completePayment('failure');
                 }
                 else {
                     //Successful
