@@ -1,5 +1,32 @@
 # TEConnect Apple Pay
-This document will cover Apple Pay specific features - available for use via TEConnect.
+This document demonstrates the available options, using Apple Pay via TEConnect.  TEConnect currently offers a Manual Entry form, Apple Pay and Google Pay.  Your app may use one - or all of these platforms to collect a payment token.  The section below explains how opt-in works with TEConnect, for each available platform. The remainder of the document focuses on Apple Pay with TEConnect.
+
+# Payment Request Opt-In
+```createTEConnect``` accepts a public key as the first argument. This public key is for [TEConnect Manual Entry](https://github.com/Magensa/te-connect-react#Getting-Started).
+The second argument is the [TEConnect options](https://github.com/Magensa/te-connect-react#TEConnect-Options) object.  
+Providing an ```appleMerchantId``` or a ```googleMerchantId``` to the ```tecPaymentRequest``` object is how to opt-in for each Payment Request Platform.  So providing an ```appleMerchantId``` is an opt-in for Apple Pay - and a ```googleMerchantId``` for Google Pay.  Example below.
+
+```javascript
+const TE_CONNECT = createTEConnect("__publicKeyGoesHere__", {
+    tecPaymentRequest: {
+        appleMerchantId: "__tecAppleMerchantId__"
+        googleMerchantId: "__googleMerchantId__",
+    }
+});
+```
+
+Opting in to one or more platform affects the way the Payment Request Object should be supplied to TEConnect - as well as the  [```CanMakePaymentsResult```](TecPaymentRequestREADME.md#CanMakePaymentsResult).
+
+Be aware that if you only opt-in for one platform (i.e. only an ```appleMerchantId``` is provided to ```createTEConnect```) - you may provide the payment request object for that specific platform.  In this case - the [Apple Pay](#Apple-Pay-Payment-Request-Object) can be provided as-is.  
+
+In the case of multiple payment request platforms (i.e. both an ```appleMerchantId``` and ```googleMerchantId``` are provided) - the payment request object must be structured to reflect each platform.  Example below.
+
+```javascript
+const paymentRequestObject = {
+    applePay: applePayRequestObject,
+    googlePay: googlePayRequestObject
+}
+```
 
 # Apple Pay Payment Request Object
 This section will specifically address the [ApplePayPaymentRequest object](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest).
@@ -86,7 +113,7 @@ When listening to the ```confirm-token``` event - there will be two special prop
         - Pass the ```token``` to the appropriate MPPG operation, unaltered, for processing.
     - ```error``` is an optional property in the case the token creation was unsuccessful.
 - ```completePayment```
-    - Call this function within 30 seconds of receiving it - otherwise a timeout error will occur and close the payment form.
+    - Call this function within 30 seconds of receiving it - otherwise a timeout error will occur and close the Apple Pay form.
     - There are two possible value types to call this function with - either a string value, or an object:
         - This function expects either ```"sucess"``` or ```"failure"``` as string options - and will display the chosen completion status on the form.
         - Optionally, if you've confirmed the user is a [qualified Apple Pay user](#User-Requirements) (```canMakePayments``` result has returned ```{ applePay: true }```) you can provide an [Apple Pay Authorization Result](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentauthorizationresult) for more descriptive error messages.
