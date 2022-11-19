@@ -116,10 +116,10 @@ When listening to the ```confirm-token``` event - there will be two special prop
     - Call this function within 30 seconds of receiving it - otherwise a timeout error will occur and close the Apple Pay form.
     - There are two possible value types to call this function with - either a string value, or an object:
         - This function expects either ```"sucess"``` or ```"failure"``` as string options - and will display the chosen completion status on the form.
-        - Optionally, if you've confirmed the user is a [qualified Apple Pay user](#User-Requirements) (```canMakePayments``` result has returned ```{ applePay: true }```) you can provide an [Apple Pay Authorization Result](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentauthorizationresult) for more descriptive error messages.
+        - Optionally, if you've confirmed the user is a [qualified Apple Pay user](#Apple-Pay-User-Requirements) (```canMakePayments``` result has returned ```{ applePay: true }```) you can provide an [Apple Pay Authorization Result](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentauthorizationresult) for more descriptive error messages.
             - In this case - there will be a ```status``` and an ```errors``` property. The status must be provided in a recognized format ([as demonstrated in the Apple docs](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentauthorizationresult)).
                 - Since this is an error scenario it's likely that the value needed would be: ```ApplePaySession.STATUS_FAILURE```.
-                - It's important to confirm that the user is a [qualified Apple Pay user](#User-Requirements) before providing this object - as ```ApplePaySession``` is a global variable that will not exist (throw an error) in all other browsing contexts.
+                - It's important to confirm that the user is a [qualified Apple Pay user](#Apple-Pay-User-Requirements)) before providing this object - as ```ApplePaySession``` is a global variable that will not exist (throw an error) in all other browsing contexts.
             - The ```errors``` can be supplied as explained in the [Payment Request Error Handling](#Payment-Request-Error-Handling) section.  
             
 ```confirm-token``` example: 
@@ -219,7 +219,11 @@ There are many options and styles available to assist with tailoring the Apple P
 |:--:|:--:|:--:|
 | ```buttonLanguage``` | ```string``` | [available button languages](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonlocale) | 
 ```buttonType``` | ```string``` | [available button types](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttontype) |
-| ```buttonStyles``` | ```string``` | ```'black'``` ```'white'``` ```'white-outline'``` [available button styles](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonstyle)  |
+| ```buttonStyles``` | ```string``` | ```'black'``` ```'white'``` ```'white-outline'``` [available button styles](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonstyle)  |  
+
+## CSS Considerations
+When the ```TecPaymentRequestButtons``` component mounts an Apple Pay button - it is wrapped in a ```<div>``` with the id of ```"te-connect-apple-pay-wrapper"```.
+You can use this target to style the wrapper around the Google Pay button, if needed.
 
 <br />
 
