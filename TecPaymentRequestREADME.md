@@ -249,7 +249,6 @@ This function is only useful _before_ the user has hit the Apple Pay button.  If
 ### ```listenFor```
 This function accepts an event name (```string```) to listen for, as well as a listener function. These events are specific to payment request interface instance created. Please [see the section below](#Payment-Request-Event-Handlers) for more details.
 
-
 # Payment Request Event Handlers
 Listening to the ```confirm-token``` event is required to complete the workflow for all payment platforms.
 
@@ -327,7 +326,7 @@ const ExampleApp = () => {
 ```
 
 # Payment Request Button Options
-The ```TecPaymentRequestButtons``` component accepts an optional prop named ```tecPrOptions```.  Here you can define your custom options for the payment request buttons. You may define custom values for the Apple Pay Button, using the property ```applePayOptions```, and Google Pay Button with ```googlePayOptions``` (You can see the [default values](#Default-Payment-Request-Button-Options-Values), for an example on how to structure the object, below).
+The ```TecPaymentRequestButtons``` component accepts an optional prop named ```tecPrOptions```.  Here you can define your custom options for the payment request buttons. You may define custom values for the Apple Pay Button, using the property ```applePayOptions```, and Google Pay Button with ```googlePayOptions```. You can see the [default values](#Default-Payment-Request-Button-Options-Values), for an example on how to structure the object, below.
 
 ## Apple Pay Button Options
 [More details about Apple Pay Button Options can be found here](https://github.com/Magensa/te-connect-react/blob/master/TecApplePayREADME.md#Apple-Pay-Button-Options)
