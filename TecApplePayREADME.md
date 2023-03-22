@@ -37,6 +37,7 @@ Below is an example of a Payment Request object.  This is where your form is def
 ```javascript
 const examplePaymentRequestObject = {
     storeDisplayName: "TEConnect Example Store",
+    applePayVersion: 3, //Default is 3, unless specified
     currencyCode: "USD",
     countryCode: "US",
     supportedNetworks: ['visa', 'masterCard', 'amex', 'discover', 'jcb'],
