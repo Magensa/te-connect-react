@@ -54,6 +54,7 @@ For more information on each property - please see [Google's Documentation](http
 |:--:|:--:|:--:|:--:|:--:|
 | apiVersion | ```number``` | :x: | 2 | Optional field to set the major version of Google Pay API |
 | apiVersionMinor | ```number``` | :x: | 0 | Optional field to set the minor version of Google Pay API |
+| allowedAuthMethods | ```string[]``` | :x: | ```["PAN_ONLY", "CRYPTOGRAM_3DS"]``` | [More details on ```allowedAuthMethods``` here](https://developers.google.com/pay/api/web/reference/request-objects#CardParameters) |
 | allowedCardNetworks | ```string[]``` | :heavy_check_mark: | N/A  | [More details on ```allowedCardNetworks``` here](https://developers.google.com/pay/api/web/reference/request-objects#CardParameters) |
 | merchantName | ```string``` | :heavy_check_mark: | N/A | ```merchantId``` is provided to the ```createTeConnect``` call. ```merchantName``` is provided in the payment request object. [More info here](https://developers.google.com/pay/api/web/reference/request-objects#MerchantInfo) |
 | gatewayId | ```string``` | :heavy_check_mark: | N/A  | Given by Magensa™ after a successful account creation |
