@@ -13,19 +13,18 @@ yarn add @magensa/te-connnect @magensa/te-connect-react
 ```
 
 # Manual Card Entry
-This document will cover the card manual entry component that TEConnect offers.  
-TEConnect also offers a [Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) component as well, with both Apple Pay and Google Pay supported. [Payment Request Documentation can be found here](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md)  
-Below we will begin with a step-by-step integration of the card manual entry component. If you would prefer to let the code speak, there is an [example implementation](#Example-Implementation).
+This document will cover the card manual entry component that TEConnect offers. 3DS Manual Entry is also available, if a valid 3DS API Key is supplied to [the `options` parameter](#TEConnect-Options).  
+TEConnect also offers a [Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) component, with both Apple Pay and Google Pay supported. [Payment Request Documentation can be found here](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md)  
+Below we will begin with a step-by-step integration of the card manual entry component. If you would prefer to let the code speak, there are [example implementations](#Example-Implementation) for both Manual Entry and 3DS Manual Entry.
 
 ## Magensa™
-TEConnect Manual Entry, and [TEConnect Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) components both require a valid [Magensa™](https://magensa.net/) account. If you need assistance creating or configuring an account, please reach out to the [Magensa Support Team](https://magensa.net/support.html).
+TEConnect Manual Entry, 3DS Manual Entry and [TEConnect Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) components all require a valid [Magensa™](https://magensa.net/) account. If you need assistance creating or configuring an account, please reach out to the [Magensa Support Team](https://magensa.net/support.html).  
 
 # Step-By-Step
 
 1. The first step is to create a TEConnect instance, and feed that instance to the wrapper around your application.   
 
     ```javascript
-    import React from 'react';
     import { TEConnect } from '@magensa/te-connect-react';
     import { createTEConnect } from '@magensa/te-connect';
     import ExampleApp from './components/exampleApp';
@@ -40,11 +39,12 @@ TEConnect Manual Entry, and [TEConnect Payment Request](https://github.com/Magen
     ```
     - It's recommended to place this instance at the entrypoint of your application, to avoid multiple re-renders - or creating a new instance accidentally.  
     - There is an [optional ```options``` object](#TEConnect-Options) that can be passed to ```createTEConnect``` as the second parameter. 
-        - See [Billing ZIP Options](#Options-for-billingZip) for more info.  
+        - See [Billing ZIP Options](#Options-for-billingZip) for more info.
+        - See [Payment Request](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) for more info.
+        - See [TecThreeDs](#TecThreeDs-3DS) for more info.
   
 2. Next, once you have your form designed - drop the ```CardEntry``` component in the place of your choosing.
     ```javascript
-    import React from 'react';
     import { CardEntry } from '@magensa/te-connect-react';
 
     const appStyles = {
@@ -65,62 +65,61 @@ TEConnect Manual Entry, and [TEConnect Payment Request](https://github.com/Magen
     - It's recommended to wrap the ```CardEntry``` with a ```<div>``` of your choosing - so you may apply wrapper styles directly to your own div for juxtaposition. It's important to note that the ```height``` of this component is set to ```100%``` so that it may respond to your application's wrapper styles. As for styles applied to the component itself - we have a [styles object](#Styles-API) that you may use to inject your own custom styles.  
     - ```stylesConfig``` prop is optional. If provided, it will override the defaults.
 
- 3. Finally, to submit the inputted card values, utilize the ```createPayment``` and ```getCurrentElements``` functions and attach to your click handler.  
- ```javascript
-    import React from 'react';
-    import { CardEntry, useTeConnect } from '@magensa/te-connect-react';
+3. Finally, to submit the inputted card values, utilize the ```createPayment``` and ```getCurrentElements``` functions and attach to your click handler.  
+    ```javascript
+        import { CardEntry, useTeConnect } from '@magensa/te-connect-react';
 
-    const customStyles =  {
-        base: {
-            wrapper: {
-                margin: '2rem',
-                padding: '2rem'
+        const customStyles =  {
+            base: {
+                wrapper: {
+                    margin: '2rem',
+                    padding: '2rem'
+                },
+                variants: {
+                    inputType: 'outlined',
+                    inputMargin: 'dense'
+                },
+                backgroundColor: '#ff7961'
             },
-            variants: {
-                inputType: 'outlined',
-                inputMargin: 'dense'
-            },
-            backgroundColor: '#ff7961'
-        },
-        boxes: {
-            textColor: "#90ee02",
-            borderRadius: 4,
-            errorColor: "#2196f3"
-        }
-    }
-
-    export default () => {
-        const { createPayment, getCurrentElements } = useTeConnect();
-
-        const clickHandler = async(e) => {
-            try {
-                const elements = getCurrentElements();
-                const teConnectResponse = await createPayment(elements, /* billingZipCode */);
-                const { error } = teConnectResponse;
-
-                if (error)
-                    console.log("Unsuccessful, message reads: ", error);
-                else
-                    console.log('result:', teConnectResponse);
-            }
-            catch(err) {
-                console.log('[Catch]:', err);
+            boxes: {
+                textColor: "#90ee02",
+                borderRadius: 4,
+                errorColor: "#2196f3"
             }
         }
 
-        return (
-            <>
-                <CardEntry stylesConfig={ customStyles } />
-                
-                <button onClick={ clickHandler }>Create Token</button>
-            </>
-        )
-    }
- ```
+        export default () => {
+            const { createPayment, getCurrentElements } = useTeConnect();
+
+            const clickHandler = async(e) => {
+                try {
+                    const elements = getCurrentElements();
+                    const teConnectResponse = await createPayment(elements /*,  billingZipCode */);
+                    const { error } = teConnectResponse;
+
+                    if (error)
+                        console.log("Unsuccessful, message reads: ", error);
+                    else
+                        console.log('result:', teConnectResponse);
+                }
+                catch(err) {
+                    console.log('[Catch]:', err);
+                }
+            }
+
+            return (
+                <>
+                    <CardEntry stylesConfig={ customStyles } />
+                    
+                    <button onClick={ clickHandler }>Create Token</button>
+                </>
+            )
+        }
+    ```
 - Make sure to ```await``` this call, since it is asyncronous, and additionally be sure to wrap the call in a ```try/catch```.
     - It's important to note that while there are some cases which will throw an exception (```catch```) - there are other cases in which an object will return successfully with an error message. Make sure you check for an ```error``` property on the returned object. If it's not present - the call is succesful. For additional information, please see the possible [return objects](#createPayment-Return-Objects)
 
-- Note that in this example, we chose to provide customStyles to the ```CardEntry``` component.  
+- Note that in this example, we chose to provide `customStyles` to the ```CardEntry``` component.  
 <br />
 
 # TEConnect Options
@@ -129,6 +128,7 @@ The second parameter of the ```createTEConnect``` method is an options object. T
 |:--:|:--:|:--:|
 | billingZip | ```boolean``` | See [billingZip options below](#Options-for-billingZip) |
 | tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](https://github.com/Magensa/te-connect-react/blob/master/TecPaymentRequestREADME.md) |
+| threeds | `TecThreeDsOptions` | See [TecThreeDs](#TecThreeDs-3DS) for more info |
 
 
 ```typescript
@@ -137,9 +137,15 @@ type TecPaymentRequestOptions = {
     googleMerchantId?: string
 }
 
+type TecThreeDsOptions = {
+    threedsApiKey: string,
+    threedsEnvironment: "sandbox" | "production"
+}
+
 type CreateTEConnectOptions = {
     hideZip?: boolean,
-    tecPaymentRequest?: TecPaymentRequestOptions
+    tecPaymentRequest?: TecPaymentRequestOptions,
+    threeds?: TecThreeDsOptions
 }
 ```
 
@@ -202,48 +208,84 @@ The below will hide the input field, and when a value is not supplied - the paym
         }
     }
 ```  
+<br />
 
-# createPayment Return Objects
-These are the possible objects that will be returned *successfully* from the ```createPayment``` function. Thrown errors will be thrown as any other async method.  
-  
-  1. ### Success:
-```typescript
-{
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
-    token: String,
-    code: String,
-    message: String,
-    status: Number,
-    cardMetaData: null | {
-        maskedPAN: String,
-        expirationDate: String,
-        billingZip: null | String
-    }
-}
+# TecThreeDs (3DS)
+TEConnect Manual Entry offers 3DS Manual Entry. To opt-in, add a `threeds` parameter to the [the ```options``` object](#TEConnect-Options) for the `createTEConnect` method.  
+Add a 3DS API key (`threedsApiKey`) to the `threeds` object, and (optionally) a `threedsEnvironment` string as well (defaults to `sandbox` for testing, when not specified). Only flip your project to `production` when you have tested with `sandbox`, and are ready to deploy to production.  
+
+[3DS `sandbox` Test Cards can be found here](https://docs.3dsintegrator.com/docs/test-cards#emv-3ds-test-cards).
+
+### _Opt In_
+```javascript
+    const teInstance = createTEConnect("__publicKeyGoesHere__", { 
+        threeds: {
+            threedsApiKey: "__3dsApiKeyGoesHere__",
+            threedsEnvironment: "sandbox"
+        }
+    });
 ```  
-  
-  2. ### Bad Request
+
+3DS workflow is used in a similar manner as manual entry. The only difference: A required [`threeDsConfigObject`](#ThreeDsConfigObject) must be fed to the `useTecThreeds` hook.  For a minimally viable 3DS solution, that is the only additional requirement needed complete the manual entry workflow. However, there is a `threeDsInterface` that the hook returns, which can optionally be used for more methods.  
+
+See the [TecThreeDs Example](#TecThreeDsExample) for an example implementation.
+
+### `threeDsInterface`
+| Method Name  | Parameters | Notes |
+|:--:|:--:|:--:|
+| listenFor | eventType (as `string`),  listener (as `function`) | Currently, `"threeds-status"` is the only `eventType` available to listen for [3DS status updates](#ThreeDs-Status-Listeners) |
+| updateThreedsConfig | `ThreeDsConfigObject` | Full update (complete object). Updates are only available prior to 3DS auth. Once cardholder has entered card info, object is not able to be updated |
+
+See the [TecThreeDs Example](#TecThreeDsExample) for example uses for these methods.
+
+## `ThreeDsConfigObject`
+TEConnect forwards the `threeDsConfigObject` to 3DS API call 'authenticate browser'. This method begins the 3DS process; TEConnect handles the interactions on your application's behalf while the cardholder is entering the card info. TEConnect only requires two properties to get started: 
+- `challengeNodeId: string` - the id of a node that must be mounted on the DOM. This node is used to mount a "challenge" iframe. 
+    - The challenge iframe is defined by the issuer of the card being authenticated (in the event that a "challenge" is required to complete the 3DS authentication). This challenge varies based upon the issuer of the card. [See ThreeDsChallenge for more info](#ThreeDs-Challenge)
+- `amount: number` - the final amount for the transaction. Required for 3DS Auth. 
+
+Please note: There are four properties, documented in the [3DS API documentation](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser), that TEConnect handles and will be ignored if supplied in the ThreeDsConfigObject: `browser` object, and card info (`pan`, `year`, and `month`).
+
+There are many optionally properties available, in addition to the required `challengeNodeId` and `amount` properties. 3DS has extensive documentation on the properties available in this call, which [can be found here](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser).  With the exception of the `browser` object, `pan`, `year`, and `month` - all other options supplied to the `useTecThreeds` hook will be forwarded to the 3DS API call.
+
+
+## ThreeDs Status Listeners
+### `threeds-status`
+Subscribe to this event to listen for status updates with the 3DS workflow.  
+See the [TecThreeDs Example](#TecThreeDsExample) for an example how to subscribe.
+
 ```typescript
-{
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
-    token: null,
-    code: String,
-    message: String,
-    error: String,
-    cardMetaData: null
+type ThreeDsMethods = "GENERATE_JWT" | "AUTHENTICATE_BROWSER" | "FINGERPRINT_DEVICE" | "CHALLENGE";
+type ThreeDsStatus = "REQUESTED" | "SUCCESS" | "FAIL" | "AWAIT_RESULTS";
+
+type ThreeDsStatusEvent = {
+    threedsMethod: ThreeDsMethods,
+    status: ThreeDsStatus,
+    message: string
 }
 ```
 
-3. ### Error (Failed Validation, Timeout, Mixed Protocol, etc)
-```typescript
-{ error: String }
-```
+## ThreeDs Challenge
+There are many possible 3DS responses ([3DS documents responses here](https://docs.3dsintegrator.com/reference/subscribetoupdates)).  When a status of type `"C"` is returned - this means that the card issuer has requested the cardholder to complete a challenge, in order to proceed. In this case - TEConnect will build the challenge iframe, and mount it on the node with the id provided (via `challengeNodeId`).  
+
+The particular challenge rendered varies greatly depending on card issuer. The cardholder must complete the challenge in order to proceed with 3DS Authentication.
+
+There are a few options available in the [ThreeDsConfigObject](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser), in regards to a challenge.  Such as `challengeIndicator` to specify if a challenge is desired.  Other options include `challengeWindowSize` and `transactionForcedTimeout` (if an early timeout is desired).  
+
+TEConnect will attempt to collect the challenge results 10 seconds after a challenge is rendered. If the results are not yet available, it will poll until results are available or timeout. It will timeout after 60 seconds.
+
+Since it's unknown what the challenge will look like, as well as the operations needed to complete the challenge - it's recommended to mount the challenge on a node that is styled with `absolute` positioning.  If you wish to place the challenge in a modal - make use of the [`threeds-status`](#ThreeDs-Status-Listeners) and listen for the status: `{ threedsMethod: "CHALLENGE", status: "REQUESTED" }` to trigger the modal.  
+
+## Additional ThreeDs Considerations
+3DS can have many potential responses ([3DS documents responses here](https://docs.3dsintegrator.com/reference/subscribetoupdates)). While 3DS auth may or may not be successful, or approved - please note that a token is always returned with a successful response, and can be used to call MPPG's `ProcessToken` for processing.  It's up to the merchant whether or not to assume the risk in the transaction. You may want to be familiar with responses, as they relate to various card networks, to determine if a liability shift has occured.  For example: [Visa](https://docs.3dsintegrator.com/docs/visa), [MasterCard](https://docs.3dsintegrator.com/docs/mastercard#faud-liability-shift-conditions), etc.  
+
+When `"sandbox"` environment is in use - the `threeDSRequestorURL` will use a placeholder value of `"https://your.domainname.com"`. When flipped to `"production"` - the origin of your web application will be used.  This is because `http:` and `localhost` domains fail validation for 3DS calls, but are useful for early development.  Be aware that your `"production"` web application must be deployed using a valid `https://` domain, for 3DS to be successful.
+
+<br />  
 
 # Styles API
+This Styles API is available to customize the form rendered for manual entry.  You may also style the container itself, using CSS, by targeting the id: `"__te-connect-secure-window"`.
+
 The styles object injected is composed of two main properties:
 - ```base```  
     - General styles applied to the container.
@@ -262,6 +304,7 @@ Below we have the complete API with examples of default values for each.
 | flexWrap | wrapper | ```string``` | ```'wrap', 'wrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
 | inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
 | inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
+| inputSize | variants | ```string``` | ```"small", "medium"``` | ```"medium"``` | input component size |  
 | autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
   
 <br />
@@ -279,6 +322,7 @@ Below we have the complete API with examples of default values for each.
         variants: {
             inputType: 'outlined',
             inputMargin: 'normal',
+            inputSize: 'medium',
             autoMinHeight: false
         },
         backgroundColor: '#fff'
@@ -311,12 +355,78 @@ Below we have the complete API with examples of default values for each.
 }
 ```
 
+# createPayment Return Objects
+These are the possible objects that will be returned *successfully* from the ```createPayment``` function. Thrown errors will be thrown as any other async method.  
+  
+  1. ### Success:
+```typescript
+{
+    magTranID: String,
+    timestamp: String,
+    customerTranRef: String,
+    token: String,
+    code: String,
+    message: String,
+    status: Number,
+    cardMetaData: null | {
+        maskedPAN: String,
+        expirationDate: String,
+        billingZip: null | String
+    },
+    threedsResults: ThreeDsResults
+}
+```  
+  
+  2. ### Bad Request
+```typescript
+{
+    magTranID: String,
+    timestamp: String,
+    customerTranRef: String,
+    token: null,
+    code: String,
+    message: String,
+    error: String,
+    cardMetaData: null
+}
+```
+
+3. ### Error (Failed Validation, Timeout, Mixed Protocol, etc)
+```typescript
+{ error: String }
+```
+
+4. ### ThreeDsResults (property of Success response, if 3DS opt-in)  
+    All responses documented in the [3DS Documentation](https://docs.3dsintegrator.com/reference/subscribetoupdates)  
+
+```typescript
+type ThreeDsResults = {
+    scaRequired?: bool,
+    creq?: string,
+    status?: string,
+    authenticationValue?: string,
+    authenticationType?: string,
+    eci?: string,
+    acsUrl?: string,
+    dsTransId?: string,
+    acsTransId?: string,
+    sdkTransId?: string,
+    error?: string,
+    errorDetail?: string,
+    errorCode?: string,
+    cardholderInfo?: string,
+    transactionId?: string,
+    correlationId?: string,
+    code?: number
+}
+```
+
 
 # Example Implementation
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { TEConnect, CardEntry, useTeConnect  } from '@magensa/te-connect-react';
 import { createTEConnect } from '@magensa/te-connect';
 
@@ -372,18 +482,77 @@ const App = () => (
     </TEConnect>
 );
 
-ReactDOM.render(
-    <React.StrictMode>
+createRoot(document.getElementById('root')).render(
+    <StrictMode>
         <App />
-    </React.StrictMode>,
+    </StrictMode>,
     document.getElementById('root')
 );
 ```
+
+## TecThreeDs Example
+This example uses the `threeDsInterface` methods. Note that this is optional, and not required to create a token with 3DS response.
+
+ ```javascript
+    import { useEffect } from 'react';
+    import { CardEntry, useTecThreeds } from '@magensa/te-connect-react';
+
+    const exampleThreedsConfig = {
+        amount: 110,
+        challengeNodeId: "example-challenge-node"
+    };
+
+    const threeDsStatusListener = msg => {
+        console.log('[3DS Listener]:', msg);
+    }
+
+    export default () => {
+        const { createPayment, getCurrentElements, threeDsInterface } = useTecThreeds(exampleThreedsConfig);
+
+        useEffect(() => {
+            if (threeDsInterface)
+                threeDsInterface.listenFor("threeds-status", threeDsStatusListener);
+        }, [threeDsInterface]);
+
+        const clickHandler = async(e) => {
+            try {
+                const elements = getCurrentElements();
+                const teConnectResponse = await createPayment(elements, /* billingZipCode */);
+                const { error } = teConnectResponse;
+
+                if (error)
+                    console.log("Unsuccessful, message reads: ", error);
+                else
+                    console.log('result:', teConnectResponse);
+            }
+            catch(err) {
+                console.log('[Catch]:', err);
+            }
+        }
+
+        const updateThreedsConfigObj = () => {
+            if (threeDsInterface)
+                threeDsInterface.updateThreedsConfig({
+                    ...exampleThreedsConfig,
+                    amount: 120
+                });
+        }
+
+        return (
+            <>
+                <CardEntry />
+                
+                <button onClick={ clickHandler }>Create Token</button>
+                <button onClick={ updateThreedsConfigObj }>Update ThreeDs Config</button>
+            </>
+        )
+    }
+ ```
 
 
 ## Minimum Requirements
 There are three dependencies to use this product. If you built your project using [create-react-app](https://github.com/facebook/create-react-app), then you have already met the requirements (may require a 'uuid' upgrade). If you are building your own React app, then please make sure to include the following in your project:  
 
-- [React](https://github.com/facebook/react) ^16.8
-- [react-dom](https://github.com/facebook/react/tree/master/packages/react-dom) ^16.8
+- [React](https://github.com/facebook/react) ^18.1
+- [react-dom](https://github.com/facebook/react/tree/master/packages/react-dom) ^18.1
 - [uuid](https://github.com/uuidjs/uuid) ^8.3.0
