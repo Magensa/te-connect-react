@@ -65,7 +65,7 @@ TEConnect Manual Entry, 3DS Manual Entry and [TEConnect Payment Request](https:/
     - It's recommended to wrap the ```CardEntry``` with a ```<div>``` of your choosing - so you may apply wrapper styles directly to your own div for juxtaposition. It's important to note that the ```height``` of this component is set to ```100%``` so that it may respond to your application's wrapper styles. As for styles applied to the component itself - we have a [styles object](#Styles-API) that you may use to inject your own custom styles.  
     - ```stylesConfig``` prop is optional. If provided, it will override the defaults.
 
-3. Finally, to submit the inputted card values, utilize the ```createPayment``` and ```getCurrentElements``` functions and attach to your click handler.  
+3. Finally, to submit the inputted card values, use the hook `useTeConnect` to provide the `createPayment` and `getCurrentElements` functions. Utilize the functions to your click handler, as demonstrated below.  
     ```javascript
         import { CardEntry, useTeConnect } from '@magensa/te-connect-react';
 
@@ -211,8 +211,12 @@ The below will hide the input field, and when a value is not supplied - the paym
 <br />
 
 # TecThreeDs (3DS)
-TEConnect Manual Entry offers 3DS Manual Entry. To opt-in, add a `threeds` parameter to the [the ```options``` object](#TEConnect-Options) for the `createTEConnect` method.  
-Add a 3DS API key (`threedsApiKey`) to the `threeds` object, and (optionally) a `threedsEnvironment` string as well (defaults to `sandbox` for testing, when not specified). Only flip your project to `production` when you have tested with `sandbox`, and are ready to deploy to production.  
+TEConnect offers a 3DS Manual Entry Component: `<ThreeDsCardEntry />`. To opt-in:
+1. Add a `threeds` parameter to the [the ```options``` object](#TEConnect-Options) for the `createTEConnect` method.
+2. Add a 3DS API key (`threedsApiKey`) to the `threeds` object, and (optionally) a `threedsEnvironment` string as well (defaults to `sandbox` for testing, when not specified). 
+    - Only flip your project to `production` when you have tested with `sandbox`, and are ready to deploy to production.
+3. Use the `ThreeDsCardEntry` component, in the same manner you would use the `CardEntry` component.
+    - Only one Manual Entry component may be mounted to the DOM at a time.  If your use-case uses both `CardEntry` and `ThreeDsCardEntry` - ensure there is a condition in place that will only mount one or the other.
 
 [3DS `sandbox` Test Cards can be found here](https://docs.3dsintegrator.com/docs/test-cards#emv-3ds-test-cards).
 
@@ -226,7 +230,51 @@ Add a 3DS API key (`threedsApiKey`) to the `threeds` object, and (optionally) a 
     });
 ```  
 
-3DS workflow is used in a similar manner as manual entry. The only difference: A required [`threeDsConfigObject`](#ThreeDsConfigObject) must be fed to the `useTecThreeds` hook.  For a minimally viable 3DS solution, that is the only additional requirement needed complete the manual entry workflow. However, there is a `threeDsInterface` that the hook returns, which can optionally be used for more methods.  
+3DS workflow is used in a similar manner as manual entry. There are a few additional requirements: 
+- A required [`threeDsConfigObject`](#ThreeDsConfigObject) must be fed to the `useTecThreeds` hook.
+    - For 3DS use the `useTecThreeds` hook instead of the manual entry `useTeConnect` hook.
+- Use `ThreeDsCardEntry` instead of the `CardEntry` component.
+
+
+```javascript
+import { ThreeDsCardEntry, useTecThreeds } from '@magensa/te-connect-react';
+
+const exampleThreedsConfig = {
+  amount: 110,
+  challengeNodeId: "example-challenge-node"
+};
+
+const App = () => {
+  const { createPayment, getCurrentElements } = useTecThreeds(exampleThreedsConfig);
+
+    const clickHandler = async(e) => {
+        try {
+            const elements = getCurrentElements();
+            console.log(elements);
+            const teConnectResponse = await createPayment(elements /* billingZipCode */);
+            const { error } = teConnectResponse;
+
+            if (error)
+                console.log("Unsuccessful, message reads: ", error);
+            else
+                console.log('result:', teConnectResponse);
+        }
+        catch(err) {
+            console.log('[Catch]:', err);
+        }
+    }
+
+    return (
+    <>
+        <ThreeDsCardEntry />
+                
+        <button onClick={ clickHandler }>Create Token</button>
+    </>
+  )
+}
+
+```
+For a minimally viable 3DS solution, those are the only additional requirements needed complete the manual entry workflow. However, there is a `threeDsInterface` returned from the `useTecThreeds` hook, which can optionally be used for more methods.  
 
 See the [TecThreeDs Example](#TecThreeDsExample) for an example implementation.
 
@@ -284,7 +332,7 @@ When `"sandbox"` environment is in use - the `threeDSRequestorURL` will use a pl
 <br />  
 
 # Styles API
-This Styles API is available to customize the form rendered for manual entry.  You may also style the container itself, using CSS, by targeting the id: `"__te-connect-secure-window"`.
+This Styles API is available to customize the form rendered for manual entry.  You may also style the outer container itself, using CSS, by targeting the id: `"__te-connect-secure-window"`.
 
 The styles object injected is composed of two main properties:
 - ```base```  
@@ -297,9 +345,9 @@ Below we have the complete API with examples of default values for each.
 ### Base
 | Property Name | Parent Property | Input Type | Acceptable Values | Default Value | Notes |
 |:--:|:--:|:--:|:--:|:--:|:---:|
-| backgroundColor | base | ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
-| margin | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
-| padding | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
+| backgroundColor | base | `string` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
+| margin | wrapper | `string` or `number` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
+| padding | wrapper | `string` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
 | direction | wrapper | ```string``` | ```'row', 'row-reverse', 'column', 'column-reverse'``` | ```'row'``` | ```'flex-direction'``` style property |
 | flexWrap | wrapper | ```string``` | ```'wrap', 'wrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
 | inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
@@ -361,39 +409,39 @@ These are the possible objects that will be returned *successfully* from the ```
   1. ### Success:
 ```typescript
 {
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
-    token: String,
-    code: String,
-    message: String,
-    status: Number,
+    magTranID: string,
+    timestamp: string,
+    customerTranRef: string,
+    token: string,
+    code: string,
+    message: string,
+    status: number,
     cardMetaData: null | {
-        maskedPAN: String,
-        expirationDate: String,
-        billingZip: null | String
+        maskedPAN: string,
+        expirationDate: string,
+        billingZip: null | string
     },
-    threedsResults: ThreeDsResults
+    threedsResults?: ThreeDsResults
 }
 ```  
   
   2. ### Bad Request
 ```typescript
 {
-    magTranID: String,
-    timestamp: String,
-    customerTranRef: String,
+    magTranID: string,
+    timestamp: string,
+    customerTranRef: string,
     token: null,
-    code: String,
-    message: String,
-    error: String,
+    code: string,
+    message: string,
+    error: string,
     cardMetaData: null
 }
 ```
 
 3. ### Error (Failed Validation, Timeout, Mixed Protocol, etc)
 ```typescript
-{ error: String }
+{ error: string }
 ```
 
 4. ### ThreeDsResults (property of Success response, if 3DS opt-in)  
@@ -466,11 +514,11 @@ const ExampleApp = () => {
     }
     
     return (
-        <React.Fragment>
+        <>
             <CardEntry stylesConfig={ customStyles } />
             
             <button onClick={ clickHandler }>Create Token</button>
-        </React.Fragment>
+        </>
     )
 }
 
@@ -495,7 +543,7 @@ This example uses the `threeDsInterface` methods. Note that this is optional, an
 
  ```javascript
     import { useEffect } from 'react';
-    import { CardEntry, useTecThreeds } from '@magensa/te-connect-react';
+    import { ThreeDsCardEntry, useTecThreeds } from '@magensa/te-connect-react';
 
     const exampleThreedsConfig = {
         amount: 110,
@@ -505,6 +553,22 @@ This example uses the `threeDsInterface` methods. Note that this is optional, an
     const threeDsStatusListener = msg => {
         console.log('[3DS Listener]:', msg);
     }
+
+    const customStyles = {
+        base: {
+            variants: {
+                inputType: 'outlined',
+                inputMargin: 'dense'
+            },
+            backgroundColor: 'rgb(255, 255, 255);'
+        },
+        boxes: {
+            labelColor: 'hsl(240 3.7% 15.9%)',
+            borderRadius: 10,
+            inputColor: 'hsl(240 3.7% 15.9%)',
+            textColor: 'hsl(240 3.7% 15.9%)'
+        }
+    };
 
     export default () => {
         const { createPayment, getCurrentElements, threeDsInterface } = useTecThreeds(exampleThreedsConfig);
@@ -540,7 +604,7 @@ This example uses the `threeDsInterface` methods. Note that this is optional, an
 
         return (
             <>
-                <CardEntry />
+                <ThreeDsCardEntry stylesConfig={ customStyles } />
                 
                 <button onClick={ clickHandler }>Create Token</button>
                 <button onClick={ updateThreedsConfigObj }>Update ThreeDs Config</button>
