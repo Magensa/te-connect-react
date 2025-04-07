@@ -231,7 +231,7 @@ TEConnect offers a 3DS Manual Entry Component: `<ThreeDsCardEntry />`. To opt-in
 ```  
 
 3DS workflow is used in a similar manner as manual entry. There are a few additional requirements: 
-- A required [`threeDsConfigObject`](#ThreeDsConfigObject) must be fed to the `useTecThreeds` hook.
+- A required [`threeDsConfig`](#ThreeDsConfigObject) object must be fed to the `<ThreeDsCardEntry />` component.
     - For 3DS use the `useTecThreeds` hook instead of the manual entry `useTeConnect` hook.
 - Use `ThreeDsCardEntry` instead of the `CardEntry` component.
 
@@ -245,7 +245,7 @@ const exampleThreedsConfig = {
 };
 
 const App = () => {
-  const { createPayment, getCurrentElements } = useTecThreeds(exampleThreedsConfig);
+  const { createPayment, getCurrentElements } = useTecThreeds();
 
     const clickHandler = async(e) => {
         try {
@@ -266,7 +266,7 @@ const App = () => {
 
     return (
     <>
-        <ThreeDsCardEntry />
+        <ThreeDsCardEntry threeDsConfig={ exampleThreedsConfig } />
                 
         <button onClick={ clickHandler }>Create Token</button>
     </>
@@ -287,14 +287,14 @@ See the [TecThreeDs Example](#TecThreeDsExample) for an example implementation.
 See the [TecThreeDs Example](#TecThreeDsExample) for example uses for these methods.
 
 ## `ThreeDsConfigObject`
-TEConnect forwards the `threeDsConfigObject` to 3DS API call 'authenticate browser'. This method begins the 3DS process; TEConnect handles the interactions on your application's behalf while the cardholder is entering the card info. TEConnect only requires two properties to get started: 
+TEConnect forwards the `threeDsConfig` object to 3DS API call 'authenticate browser'. This method begins the 3DS process; TEConnect handles the interactions on your application's behalf while the cardholder is entering the card info. TEConnect only requires two properties to get started: 
 - `challengeNodeId: string` - the id of a node that must be mounted on the DOM. This node is used to mount a "challenge" iframe. 
     - The challenge iframe is defined by the issuer of the card being authenticated (in the event that a "challenge" is required to complete the 3DS authentication). This challenge varies based upon the issuer of the card. [See ThreeDsChallenge for more info](#ThreeDs-Challenge)
 - `amount: number` - the final amount for the transaction. Required for 3DS Auth. 
 
 Please note: There are four properties, documented in the [3DS API documentation](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser), that TEConnect handles and will be ignored if supplied in the ThreeDsConfigObject: `browser` object, and card info (`pan`, `year`, and `month`).
 
-There are many optionally properties available, in addition to the required `challengeNodeId` and `amount` properties. 3DS has extensive documentation on the properties available in this call, which [can be found here](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser).  With the exception of the `browser` object, `pan`, `year`, and `month` - all other options supplied to the `useTecThreeds` hook will be forwarded to the 3DS API call.
+There are many optionally properties available, in addition to the required `challengeNodeId` and `amount` properties. 3DS has extensive documentation on the properties available in this call, which [can be found here](https://docs.3dsintegrator.com/reference/post_v2-2-authenticate-browser).  With the exception of the `browser` object, `pan`, `year`, and `month` - all other options supplied to the `<ThreeDsCardEntry />` component will be forwarded to the 3DS API call.
 
 
 ## ThreeDs Status Listeners
@@ -327,7 +327,7 @@ Since it's unknown what the challenge will look like, as well as the operations 
 ## Additional ThreeDs Considerations
 3DS can have many potential responses ([3DS documents responses here](https://docs.3dsintegrator.com/reference/subscribetoupdates)). While 3DS auth may or may not be successful, or approved - please note that a token is always returned with a successful response, and can be used to call MPPG's `ProcessToken` for processing.  It's up to the merchant whether or not to assume the risk in the transaction. You may want to be familiar with responses, as they relate to various card networks, to determine if a liability shift has occured.  For example: [Visa](https://docs.3dsintegrator.com/docs/visa), [MasterCard](https://docs.3dsintegrator.com/docs/mastercard#faud-liability-shift-conditions), etc.  
 
-When `"sandbox"` environment is in use - the `threeDSRequestorURL` will use a placeholder value of `"https://your.domainname.com"`. When flipped to `"production"` - the origin of your web application will be used.  This is because `http:` and `localhost` domains fail validation for 3DS calls, but are useful for early development.  Be aware that your `"production"` web application must be deployed using a valid `https://` domain, for 3DS to be successful.
+When `"sandbox"` environment is in use - the `threeDSRequestorURL` will use a placeholder value. When flipped to `"production"` - the origin of your web application will be used.  This is because `http:` and `localhost` domains fail validation for 3DS calls, but are useful for early development.  Be aware that your `"production"` web application must be deployed using a valid `https://` domain, for 3DS to be successful.
 
 <br />  
 
@@ -571,7 +571,7 @@ This example uses the `threeDsInterface` methods. Note that this is optional, an
     };
 
     export default () => {
-        const { createPayment, getCurrentElements, threeDsInterface } = useTecThreeds(exampleThreedsConfig);
+        const { createPayment, getCurrentElements, threeDsInterface } = useTecThreeds();
 
         useEffect(() => {
             if (threeDsInterface)
@@ -604,7 +604,7 @@ This example uses the `threeDsInterface` methods. Note that this is optional, an
 
         return (
             <>
-                <ThreeDsCardEntry stylesConfig={ customStyles } />
+                <ThreeDsCardEntry threeDsConfig={ exampleThreedsConfig } stylesConfig={ customStyles } />
                 
                 <button onClick={ clickHandler }>Create Token</button>
                 <button onClick={ updateThreedsConfigObj }>Update ThreeDs Config</button>
