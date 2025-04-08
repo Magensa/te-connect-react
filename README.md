@@ -276,7 +276,7 @@ const App = () => {
 ```
 For a minimally viable 3DS solution, those are the only additional requirements needed complete the manual entry workflow. However, there is a `threeDsInterface` returned from the `useTecThreeds` hook, which can optionally be used for more methods.  
 
-See the [TecThreeDs Example](#TecThreeDsExample) for an example implementation.
+See the [TecThreeDs Example](#TecThreeDs-Example) for an example implementation.
 
 ### `threeDsInterface`
 | Method Name  | Parameters | Notes |
