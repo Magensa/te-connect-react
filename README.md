@@ -284,7 +284,7 @@ See the [TecThreeDs Example](#TecThreeDs-Example) for an example implementation.
 | listenFor | eventType (as `string`),  listener (as `function`) | Currently, `"threeds-status"` is the only `eventType` available to listen for [3DS status updates](#ThreeDs-Status-Listeners) |
 | updateThreedsConfig | `ThreeDsConfigObject` | Full update (complete object). Updates are only available prior to 3DS auth. Once cardholder has entered card info, object is not able to be updated |
 
-See the [TecThreeDs Example](#TecThreeDsExample) for example uses for these methods.
+See the [TecThreeDs Example](#TecThreeDs-Example) for example uses for these methods.
 
 ## `ThreeDsConfigObject`
 TEConnect forwards the `threeDsConfig` object to 3DS API call 'authenticate browser'. This method begins the 3DS process; TEConnect handles the interactions on your application's behalf while the cardholder is entering the card info. TEConnect only requires two properties to get started: 
@@ -300,7 +300,7 @@ There are many optionally properties available, in addition to the required `cha
 ## ThreeDs Status Listeners
 ### `threeds-status`
 Subscribe to this event to listen for status updates with the 3DS workflow.  
-See the [TecThreeDs Example](#TecThreeDsExample) for an example how to subscribe.
+See the [TecThreeDs Example](#TecThreeDs-Example) for an example how to subscribe.
 
 ```typescript
 type ThreeDsMethods = "GENERATE_JWT" | "AUTHENTICATE_BROWSER" | "FINGERPRINT_DEVICE" | "CHALLENGE";
@@ -533,8 +533,7 @@ const App = () => (
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <App />
-    </StrictMode>,
-    document.getElementById('root')
+    </StrictMode>
 );
 ```
 
