@@ -332,9 +332,11 @@ When `"sandbox"` environment is in use - the `threeDSRequestorURL` will use a pl
 <br />  
 
 # Styles API
-This Styles API is available to customize the form rendered for manual entry.  You may also style the outer container itself, using CSS, by targeting the id: `"__te-connect-secure-window"`.
+This Styles API is available to customize the form rendered for manual entry.  You may also style the container itself, using CSS, by targeting the id: `"__te-connect-secure-window"`.  
 
-The styles object injected is composed of two main properties:
+For 3DS Challenges: the `"#_threeds-challenge-frame-request"` is the iframe element in which the card issuer may render their challenge to the card holder. You may target this element to apply styles to the challenge container.  
+
+The styles object injected is comprised of two main properties:
 - ```base```  
     - General styles applied to the container.
 - ```boxes```
@@ -343,17 +345,19 @@ The styles object injected is composed of two main properties:
 Below we have the complete API with examples of default values for each.
 
 ### Base
-| Property Name | Parent Property | Input Type | Acceptable Values | Default Value | Notes |
-|:--:|:--:|:--:|:--:|:--:|:---:|
-| backgroundColor | base | `string` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
-| margin | wrapper | `string` or `number` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
-| padding | wrapper | `string` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
-| direction | wrapper | ```string``` | ```'row', 'row-reverse', 'column', 'column-reverse'``` | ```'row'``` | ```'flex-direction'``` style property |
-| flexWrap | wrapper | ```string``` | ```'wrap', 'wrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
-| inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
-| inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
-| inputSize | variants | ```string``` | ```"small", "medium"``` | ```"medium"``` | input component size |  
-| autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
+| Property Name | Min Version Available | Parent Property | Input Type | Acceptable Values | Default Value | Notes |
+|:--:|:--:|:--:|:--:|:--:|:---:|:---:|
+| backgroundColor | 1 | base | ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
+| margin | 1 | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
+| padding | 1 | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
+| direction | 1 | wrapper | ```string``` | ```'row', 'row-reverse', 'column', 'column-reverse'``` | ```'row'``` | ```'flex-direction'``` style property |
+| flexWrap | 1 | wrapper | ```string``` | ```'wrap', 'nowrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
+| inputType | 1 | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
+| inputMargin | 1 | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
+| inputSize | 1 | variants | ```string``` | ```"small", "medium"``` | ```"medium"``` | input component size |  
+| autoMinHeight | 1 | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
+| enableIcons | 2 | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will add icons to input boxes (card icon, clear input icon buttons, validation error icons). Adding icons to v1 StylesAPI is not recommended | 
+| alternateLayout | 2 | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will place 'CVV' and 'EXP' boxes in the same middle row | 
   
 <br />
 
@@ -371,7 +375,9 @@ Below we have the complete API with examples of default values for each.
             inputType: 'outlined',
             inputMargin: 'normal',
             inputSize: 'medium',
-            autoMinHeight: false
+            autoMinHeight: false,
+            enableIcons: false,
+            alternateLayout: false
         },
         backgroundColor: '#fff'
     }
@@ -380,13 +386,16 @@ Below we have the complete API with examples of default values for each.
 <br />
 
 ### Boxes
-| Property Name | Input Type | Acceptable Values | Default Value | Notes |
-|:--:|:--:|:--:|:--:|:--:|
-| labelColor | ```string``` | jss color (rgb, #, or color name) | ```"#3f51b5"``` | label text and input outline (or underline) color |
-| textColor | ```string``` | jss color (rgb, #, or color name) | ```"rgba(0, 0, 0, 0.87)"``` | color of text for input value *Also applies :onHover color to outline/underline* |
-| borderRadius | ```number``` | numerical unit for css ```border-radius``` property | 4 | border radius for input boxes |
-| inputColor | ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | input box background color |  
-| errorColor | ```string``` | jss color (rgb, #, or color name) | ```"#f44336"``` | Error text and box outline (or underline) color |  
+| Property Name | Min Version Available | Input Type | Acceptable Values | Default Value | Notes |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| version | 2 | `number` | `1` or `2` | `1` | Styles API version. Defaults to v1. v2 exposes more property options, and updated UX behavior | 
+| labelColor | 1 | ```string``` | jss color (rgb, #, or color name) | ```"#3f51b5"``` | label text and input outline (or underline) color |
+| textColor | 1 |  ```string``` | jss color (rgb, #, or color name) | ```"rgba(0, 0, 0, 0.87)"``` | color of text for input value *Also applies :onHover color to outline/underline* |
+| borderRadius | 1 |  ```number``` | numerical unit for css ```border-radius``` property | 4 | border radius for input boxes |
+| inputColor | 1 |  ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | input box background color |  
+| errorColor | 1 |  ```string``` | jss color (rgb, #, or color name) | ```"#f44336"``` | Error text and box outline (or underline) color |  
+| borderWidth | 2 |  `number` | numerical unit for css `border-width` | 2 | Border width for outline or underline (depending on `inputType`) |  
+| focusedColor | 2 |  ```string``` | jss color (rgb, #, or color name) | inherit from `labelColor` | Label & outline/underline color (depending on `inputType`) for input box when focused |  
   
 <br />
 
@@ -398,7 +407,9 @@ Below we have the complete API with examples of default values for each.
         textColor: "rgba(0, 0, 0, 0.87)",
         borderRadius: 4,
         errorColor: "#f44336",
-        inputColor: "#fff"
+        inputColor: "#fff",
+        borderWidth: 2,
+        focusedColor: null
     }
 }
 ```
