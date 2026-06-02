@@ -216,11 +216,16 @@ There are many options and styles available to assist with tailoring the Apple P
     - ```"te-connect-apple-pay-btn"```
     - When applying custom CSS - please be sure to adhere to [Apple's Guidelines](https://developer.apple.com/design/human-interface-guidelines/apple-pay/overview/buttons-and-marks)
 
-| Property Name | Type | Possible Values |
-|:--:|:--:|:--:|
-| ```buttonLanguage``` | ```string``` | [available button languages](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonlocale) | 
-```buttonType``` | ```string``` | [available button types](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttontype) |
-| ```buttonStyles``` | ```string``` | ```'black'``` ```'white'``` ```'white-outline'``` [available button styles](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonstyle)  |  
+| Property Name | Type | Default Value | Possible Values |
+|:--:|:--:|:--:|:--:|
+| ```buttonLanguage``` | ```string``` | ```'en'``` | [available button languages](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonlocale) | 
+| ```buttonType``` | ```string``` | ```'plain'``` | [available button types](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttontype) |
+| ```buttonStyle``` | ```string``` | ```'black'``` | ```'black'``` ```'white'``` ```'white-outline'``` [available button styles](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaybuttonstyle) |
+| ```buttonWidth``` | ```string``` | ```'100%'``` | Any valid CSS width value (e.g., ```'200px'```, ```'50%'```) |
+| ```buttonHeight``` | ```string``` | ```'30px'``` | Any valid CSS height value (e.g., ```'40px'```, ```'3rem'```) |
+| ```buttonPadding``` | ```string``` | ```'0px'``` | Any valid CSS padding value (e.g., ```'10px'```, ```'5px 10px'```) |
+| ```buttonBorderRadius``` | ```string``` | ```'4px'``` | Any valid CSS border-radius value (e.g., ```'8px'```, ```'50%'```) |
+| ```buttonBoxSizing``` | ```string``` | ```'border-box'``` | ```'border-box'``` or ```'content-box'``` |
 
 ## CSS Considerations
 When the ```TecPaymentRequestButtons``` component mounts an Apple Pay button - it is wrapped in a ```<div>``` with the id of ```"te-connect-apple-pay-wrapper"```.
